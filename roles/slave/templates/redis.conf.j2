@@ -1,0 +1,24 @@
+bind {{ ansible_default_ipv4.address }}
+
+protected-mode no
+port 6379
+tcp-backlog 4096
+tcp-keepalive 600
+loglevel notice
+daemonize yes
+
+requirepass {{redispassword}}
+masterauth {{redispassword}}
+
+dir "/var/lib/redis/"
+logfile "/var/log/redis/redis.log"
+
+maxclients 5000
+maxmemory {{memory}}
+
+maxmemory-policy allkeys-lru
+
+save ""
+appendonly no 
+
+slaveof {{ groups['master'][0] }} 6379

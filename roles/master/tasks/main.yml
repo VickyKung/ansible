@@ -1,0 +1,5 @@
+- name: copy redis.conf.j2
+  template: src=redis.conf.j2 dest=/usr/local/redis/redis.conf
+ 
+- name: restart redis server
+  service: name=redis-server state=restarted
