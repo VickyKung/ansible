@@ -1,0 +1,22 @@
+[Unit]
+Description=Redis data structure server
+Documentation=https://redis.io/documentation
+
+[Service]
+ExecStart=/usr/local/bin/redis-server /etc/redis-sentinel.conf --sentinel
+ExecStop=/usr/local/bin/redis-cli -h {{ ansible_default_ipv4.address }} -p 26379 shutdown 
+Restart=always
+LimitNOFILE=65535
+NoNewPrivileges=yes
+#OOMScoreAdjust=-900
+#PrivateTmp=yes
+#Type=notify
+Type=forking
+#TimeoutStartSec=100
+#TimeoutStopSec=100
+UMask=0077
+User=redis
+Group=redis
+
+[Install]
+WantedBy=multi-user.target
