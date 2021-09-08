@@ -1,0 +1,81 @@
+#- name: install java 8
+#  apt:
+#    state: present
+#    name: default-jre
+- name: copy pakages to es node
+  copy: 
+    src: "{{ item.src }}"
+    dest: /usr/local/src/
+  with_items:
+    - { src: 'elasticsearch-5.6.8.deb'}
+    - { src: 'x-pack-5.6.8.jar'}
+    - { src: 'x-pack-5.6.8.zip'}
+    - { src: 'license.json'}
+
+
+- name: install es in debian
+  apt:
+    deb: /usr/local/src/elasticsearch-5.6.8.deb
+
+- name: create es data and log dir 
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+  with_items:
+    - /mnt/lv01/elasticsearch
+    - /mnt/lv01/repo
+    - /mnt/lv01/logs
+
+
+- name: install x-pack plugin
+  shell: echo "y" |  /usr/share/elasticsearch/bin/elasticsearch-plugin  install  file:///usr/local/src/x-pack-5.6.8.zip
+
+- name: copy x-pack.jar  
+  copy:
+    src: x-pack-5.6.8.jar
+    dest: /usr/share/elasticsearch/plugins/x-pack/ 
+    owner: elasticsearch
+    group: elasticsearch
+
+
+- name: configure es file
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "elasticsearch"
+    group: "elasticsearch"
+    mode: "0660"
+    force: yes
+    backup: yes
+  with_items:
+    - { "src": elasticsearch.yml.j2 , "dest":/etc/elasticsearch/elasticsearch.yml }
+    - { "src": jvm.options.j2 , "dest":/etc/elasticsearch/jvm.options }
+
+- name: start elasticsearch
+  service:
+    state: restarted
+    enabled: yes
+    name: elasticsearch.service
+
+
+- name: wait for es5 to start
+  wait_for: port=9200 state=started
+
+- name: import license 
+  uri: 
+    url: "http://127.0.0.1:9200/_xpack/license"
+    method: PUT
+    user: elastic
+    password: changeme
+    body: "{{ lookup('file','license.json') }}"
+    headers: 
+      Content-Type: application/json 
+    body_format: json
+    return_content: yes
+    status_code: 200
+#- name: import license
+#  shell: 'curl -X POST -d@/usr/local/src/license.json -H "Content-Type: application/json" http://elastic:changeme@127.0.0.1:9200/_xpack/license'
+
+

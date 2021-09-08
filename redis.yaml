@@ -1,9 +1,0 @@
-- hosts: sentinel
-  vars:
-    - memory: 1G
-    - redispassword: 8VDNCuPMLw2HPYvzT4M5pRYw 
-  remote_user: root
-  gather_facts: True
-  roles:
-    - sentinel
-    

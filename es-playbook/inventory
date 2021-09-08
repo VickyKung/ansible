@@ -1,0 +1,11 @@
+[master]
+192.168.30.241 role=master
+192.168.30.243 role=master
+192.168.30.242 role=master
+
+[client]
+192.168.30.242 role=client
+
+[es:children]
+master
+client

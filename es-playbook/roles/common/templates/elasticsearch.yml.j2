@@ -1,0 +1,47 @@
+{% if es_cluster_name is not defined %}
+cluster.name: elasticsearch
+{% else %}
+cluster.name: {{ es_cluster_name }}
+{% endif %}
+
+{% if role == "master" %}
+node.master: true
+node.ingest: false
+node.data: false
+{% endif %}
+
+{% if role == "client" %}
+node.master: false
+node.ingest: true
+node.data: false
+{% endif %}
+
+{% if role == "mix"  %}
+node.master: true
+node.ingest: false
+node.data: true
+{% endif %}
+
+
+
+
+
+path.data: {{ es_data_dirs }}
+path.logs: {{ es_log_dirs}}
+path.repo: {{ es_repo_dirs}}
+
+
+network.host: 0.0.0.0
+http.port: 9200
+
+
+discovery.zen.ping.unicast.hosts: [{% for host in groups['master'] %}"{{ host }}"{% if not loop.last %},{% endif %}{% endfor %}]
+discovery.zen.minimum_master_nodes: {{ minimum_master_nodes }}
+
+thread_pool.bulk.queue_size: 2000
+thread_pool.search.queue_size: 2000
+thread_pool.index.queue_size: 2000
+thread_pool.get.queue_size: 2000
+
+xpack.security.enabled: true
+
