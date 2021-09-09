@@ -1,0 +1,69 @@
+- name: install pakages
+  apt:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - netcat
+#   - default-jre
+    - nmap
+
+- name: add zookeeper  group
+  group: name=zookeeper
+
+- name: add zookeeper user 
+  user: name=zookeeper groups=zookeeper shell=/sbin/nologin
+
+- name: copy zookeeper pakages 
+  copy: src=apache-zookeeper-3.6.1-bin.tar.gz  dest=/usr/local/src/
+
+- name: unarchive zookeeper packages
+  unarchive: src=/usr/local/src/apache-zookeeper-3.6.1-bin.tar.gz  dest=/usr/local/src copy=no owner=zookeeper group=zookeeper
+
+- name: Create symlink zookeeper  install  dir
+  file: 
+    path: /usr/local/zookeeper
+    src: /usr/local/src/apache-zookeeper-3.6.1-bin
+    state: link
+    owner: zookeeper
+    group: zookeeper
+
+
+- name: create zookeeper data  and log dir 
+  file: 
+    path: "{{ item }}"
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+    mode: 0755
+  with_items:
+    - /mnt/lv01/zookeeper
+    - /mnt/lv01/logs
+
+- name: configure zookeeper file
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: zookeeper
+    group: zookeeper
+    mode:  0660
+    force: yes
+  with_items:
+    - { src: zoo.cfg.j2, dest: /usr/local/zookeeper/conf/zoo.cfg}
+    - { src: zookeeper.service.j2, dest: /etc/systemd/system/zookeeper.service}
+    - { src: myid.j2, dest: /mnt/lv01/zookeeper/myid}
+
+- name: add zk monitor to zabbix
+  shell: echo  "UserParameter=echo2nc[*],echo $1 | nc $2 $3" >>/etc/zabbix/zabbix_agentd.conf
+
+- name: restart zabbix-agent
+  service:
+    state: restarted
+    name: zabbix-agent
+
+- name: add zookeeper to system service
+  service:
+    state: restarted
+    enabled: yes
+    name: zookeeper.service
+
+

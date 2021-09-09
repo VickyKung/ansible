@@ -1,0 +1,4 @@
+[zk]
+192.168.30.241 zookeeper_id=1
+192.168.30.242 zookeeper_id=2
+192.168.30.243 zookeeper_id=3

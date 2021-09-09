@@ -1,0 +1,13 @@
+tickTime=10000
+initLimit=10
+syncLimit=5
+dataDir=/mnt/lv01/zookeeper/
+clientPort=2181
+maxClientCnxns=3000
+minSessionTimeout=30000
+maxSessionTimeout=60000
+4lw.commands.whitelist=mntr,cons,ruok
+
+{% for host in groups['zk'] %}
+server.{{ hostvars[host].zookeeper_id | default(zookeeper_id) }}={{ hostvars[host].ansible_ens192.ipv4.address }}:2888:3888
+{% endfor %}

@@ -1,0 +1,16 @@
+[Unit]
+Description=zookeeper
+After=syslog.target network.target
+
+[Service]
+Type=forking
+Environment=ZOO_LOG_DIR=/mnt/lv01/logs/
+ExecStart=/usr/local/zookeeper/bin/zkServer.sh start
+ExecStop=/usr/local/zookeeper/bin/zkServer.sh stop
+ExecReload=/usr/local/zookeeper/bin/zkServer.sh restart
+Restart=always
+User=zookeeper
+Group=zookeeper
+
+[Install]
+WantedBy=multi-user.target
