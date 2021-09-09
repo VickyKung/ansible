@@ -1,7 +1,7 @@
-#- name: install java 8
-#  apt:
-#    state: present
-#    name: default-jre
+- name: install java 8
+  apt:
+    state: present
+    name: default-jre
 - name: copy pakages to es node
   copy: 
     src: "{{ item.src }}"
