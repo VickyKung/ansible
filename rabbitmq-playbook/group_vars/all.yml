@@ -1,0 +1,12 @@
+rabbitmq_cluster_master: node-p1
+rabbitmq_hosts: |
+  192.168.30.241 node-p1
+  192.168.30.242 node-p2
+  192.168.30.243 node-p3
+
+rabbitmq_create_cluster: yes
+rabbitmq_erlang_cookie: WKRBTTEQRYPTQOPUKSVF
+rabbitmq_plugins:
+  - rabbitmq_management
+  - rabbitmq_stomp
+

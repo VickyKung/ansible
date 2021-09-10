@@ -1,0 +1,4 @@
+- hosts: mq-cluster
+  remote_user: root
+  roles:
+    - common

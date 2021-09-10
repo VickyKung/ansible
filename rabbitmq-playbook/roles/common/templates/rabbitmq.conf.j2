@@ -1,0 +1,23 @@
+vm_memory_high_watermark.relative = 0.8
+vm_memory_high_watermark_paging_ratio = 0.5
+
+log.file.level = error
+log.default.level = error
+
+
+default_user = dootech
+default_pass = dootech2021
+
+listeners.tcp.default = 5672
+
+tcp_listen_options.backlog = 4096
+tcp_listen_options.nodelay = true
+tcp_listen_options.linger.on = true
+tcp_listen_options.linger.timeout = 0
+tcp_listen_options.exit_on_close = false
+tcp_listen_options.keepalive = true
+tcp_listen_options.send_timeout = 15000
+
+
+mnesia_table_loading_retry_timeout = 60000
+mnesia_table_loading_retry_limit = 15

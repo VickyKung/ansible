@@ -1,0 +1,20 @@
+- name: create configure file
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 0644
+  with_items:
+    - {src: rabbitmq.conf.j2,dest: /etc/rabbitmq/rabbitmq.conf}
+    - {src: rabbitmq-env.conf.j2,dest: /etc/rabbitmq/rabbitmq-env.conf}
+  notify:
+    restart rabbitmq-server
+
+- name: enable rabbitmq  plugin 
+  rabbitmq_plugin:
+    names: "{{item}}"
+    prefix: /usr/lib/rabbitmq
+    state: enabled
+    new_only: yes
+  with_items: "{{ rabbitmq_plugins }}"
