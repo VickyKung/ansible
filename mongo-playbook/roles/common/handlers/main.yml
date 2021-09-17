@@ -1,0 +1,24 @@
+
+- name: start mongodb
+  service:
+    name: mongod
+    state: started
+    enabled: true
+
+- name: stop mongodb
+  service:
+    name: mongod
+    state: stopped
+    enabled: true
+
+- name: restart mongodb
+  service:
+    name: mongod
+    state: restarted
+
+- name: wait when mongodb is started
+  wait_for:
+    host: "{{ item }}"
+    port: 27017
+    timeout: 120
+  with_items: localhost

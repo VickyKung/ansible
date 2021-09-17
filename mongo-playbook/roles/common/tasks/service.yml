@@ -1,0 +1,5 @@
+- name: ensure mongodb is started and enabled
+  service:
+    name: mongod
+    state: started
+    enabled: true

@@ -1,0 +1,12 @@
+[mongo_master]
+192.168.30.241 MONGO_MASTER=true
+
+
+[mongo_replicas]
+192.168.30.242
+192.168.30.243
+
+[mongo:children]
+mongo_master
+mongo_replicas
+

@@ -1,0 +1,8 @@
+mongodb_admin_user: "admin"
+mongodb_admin_password: "abc123"
+mongodb_conf_auth: true
+mongodb_replSet_enabled: true
+mongodb_replSet_member: "groups['mongo-replicas']"
+mongodb_replSet_name: rs-test
+mongodb_safeMode: false
+mongodb_replSet_isMaster: true

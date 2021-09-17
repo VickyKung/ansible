@@ -1,0 +1,8 @@
+- name: configure mongo replication key
+  template:
+    src: mongodb-keyfile.j2
+    dest: /mnt/lv01/mongodb-keyfile
+    owner: mongodb
+    group: mongodb
+    mode: 0600
+

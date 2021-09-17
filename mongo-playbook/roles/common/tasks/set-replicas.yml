@@ -1,0 +1,50 @@
+---
+- block:
+  - name: initiate replica set
+    mongodb_replicaset:
+      replica_set: "{{mongodb_replSet_name}}"
+      login_host: "127.0.0.1"
+      login_port: "27017"
+      members:
+        - 192.168.30.241:27017
+        - 192.168.30.242:27017
+        - 192.168.30.243:27017
+
+  - name: connect to master
+    mongodb_replicaset:
+      replica_set: "{{ mongodb_replSet_name }}"
+      login_host: "{{ mongodb_replSet_master }}"
+      login_port: "27017"
+      arbiter_at_index: 2
+      members:
+        - 192.168.30.241:27017
+        - 192.168.30.242:27017
+        - 192.168.30.243:27017
+  when: not mongodb_conf_auth
+
+- block:
+  - name: initiate replica set (authenticated)
+    mongodb_replicaset:
+      replica_set: "{{ mongodb_replSet_name }}"
+      login_host: "127.0.0.1"
+      login_port: "27017"
+      login_user: "{{ mongodb_admin_user }}"
+      login_password: "{{ mongodb_admin_password }}"
+      members:
+        - 192.168.30.241:27017
+        - 192.168.30.242:27017
+        - 192.168.30.243:27017
+
+  - name: connect to master (authenticated)
+    mongodb_replicaset:
+      replica_set: "{{ mongodb_replSet_name }}"
+      login_host: "{{ mongodb_replSet_master }}"
+      login_port: "27017"
+      login_user: "{{ mongodb_admin_user }}"
+      login_password: "{{ mongodb_admin_password }}"
+      arbiter_at_index: 2
+      members:
+        - 192.168.30.241:27017
+        - 192.168.30.242:27017
+        - 192.168.30.243:27017
+  when: mongodb_conf_auth

@@ -1,0 +1,24 @@
+- name: set authorization no
+  set_fact:
+    authorization: false
+
+- name: configure no auth config file
+  include: authorization.yml
+
+- name:
+  community.mongodb.mongodb_user:
+    database: "admin"
+    name: "{{mongodb_admin_user}}"
+    password: "{{mongodb_admin_password}}"
+    roles: "root"
+    login_port: 27017
+
+
+
+- name: set authorization yes
+  set_fact:
+    authorization: true
+
+- name: configure need  auth config file
+  include: authorization.yml
+

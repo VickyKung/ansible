@@ -1,0 +1,20 @@
+#- name: register replicas_host
+#  set_fact:
+#    replicaset_host: []
+
+#- name: loop host
+#  set_fact:
+#    replicaset_host: "{{replicaset_host}}+ [ '{{ item }}:27017' ]"
+#  with_items: "{{groups['mongo']}}"
+
+
+- name: init replicaset
+  community.mongodb.mongodb_replicaset:
+    login_host: "localhost"
+    login_port: 27017
+    login_user: "{{mongodb_admin_user}}"
+    login_password: "{{mongodb_admin_password}}"
+    replica_set: "{{mongodb_replSet_name}}"
+    heartbeat_timeout_secs: 20
+    arbiter_at_index: 2
+    members: "{{groups.mongo|join(',')}}"

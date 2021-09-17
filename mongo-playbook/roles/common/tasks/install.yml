@@ -1,0 +1,25 @@
+- name: copy packages 
+  copy:
+    src: "{{item.src}}"
+    dest: /usr/local/src
+  with_items:
+    - {src: 'mongodb-org-server_4.2.12_amd64.deb'}
+    - {src: 'mongodb-org-shell_4.2.12_amd64.deb'}
+
+- name: install mongo pkg
+  apt:
+    deb: "{{item}}"
+  with_items:
+    - /usr/local/src/mongodb-org-server_4.2.12_amd64.deb
+    - /usr/local/src/mongodb-org-shell_4.2.12_amd64.deb
+
+- name: create mongo data dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: mongodb
+    group: mongodb
+  with_items:
+    - /mnt/lv01/mongodb/
+    - /var/run/mongodb/
+

@@ -1,0 +1,6 @@
+{% for host in mongo_replicas %}
+  {% for db in mongo_databases %}
+      rs.add("{{ hostvars[host].inventory_hostname }}:27017");
+	   sleep(1000);
+{% endfor %}
+{% endfor %}

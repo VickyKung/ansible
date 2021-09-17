@@ -1,0 +1,13 @@
+config = {
+ "_id":{{mongodb_replSet_name}},
+{% for host in groups['mongo-replica'] %}
+  "members":[
+    {% if hostvars[inventory_hostname] != arbitary %}
+      {"_id":{{ hostvars[host].priority}},"host":"{{hostvars[host].ansible_ens192.ipv4.address}}:27017"},
+	{% else %}
+	  {"_id":{{ hostvars[host].priority}},"host":"{{hostvars[host].ansible_ens192.ipv4.address}}:27017",arbiterOnly:true}
+    {% end %}
+		 ]
+		 }
+{% endfor  %}
+rs.initiate(config);

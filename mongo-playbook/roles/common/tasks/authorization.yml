@@ -1,0 +1,13 @@
+- name: configure mongo file
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart mongodb
+    - wait when mongodb is started
+
+- name: Flush all handlers at this point
+  meta: flush_handlers
