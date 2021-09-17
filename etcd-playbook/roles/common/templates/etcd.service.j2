@@ -1,0 +1,18 @@
+[Unit]
+Description=etcd key-value store
+Documentation=https://github.com/etcd-io/etcd
+After=network.target
+ 
+[Service]
+User=etcd
+Type=notify
+Environment=ETCD_DATA_DIR=/mnt/lv01/etcd/
+Environment=ETCD_NAME=%m
+EnvironmentFile=-/etc/etcd/etcd.conf
+ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) /usr/local/bin/etcd --name=\"${ETCD_NAME}\" --data-dir=\"${ETCD_DATA_DIR}\" --listen-client-urls=\"${ETCD_LISTEN_CLIENT_URLS}\" --quota-backend-bytes=4096000000 --auto-compaction-retention=1 --heartbeat-interval=100 --election-timeout=500"
+Restart=always
+RestartSec=10s
+LimitNOFILE=65535
+  
+[Install]
+WantedBy=multi-user.target

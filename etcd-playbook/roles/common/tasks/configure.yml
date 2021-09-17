@@ -1,0 +1,10 @@
+- name: configure etcd 
+  template:
+    src: etcd.conf.j2
+    dest: /etc/etcd/etcd.conf
+  notify:
+    - restart etcd
+
+- name: Flush all handlers at this point
+  meta: flush_handlers
+

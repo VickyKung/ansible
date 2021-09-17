@@ -1,0 +1,16 @@
+- name: restart etcd
+  service: 
+    name: etcd.service
+    state: restarted
+    enabled: true
+
+- name: start etcd
+  service:
+    name: etcd.service
+    state: started
+    enabled: true
+
+- name: stop etcd
+  service: 
+    name: etcd.service
+    state: stopped

@@ -1,0 +1,54 @@
+- name: copy packages to destination
+  copy:
+    src: etcd-v3.3.11-linux-amd64.tar.gz
+    dest: /usr/local/src/
+  
+- name: add etcd group
+  group: name=etcd
+
+- name: add etcd user
+  user: name=etcd group=etcd shell=/sbin/nologin
+
+- name: tar etcd pakcages 
+  unarchive: 
+    src: /usr/local/src/etcd-v3.3.11-linux-amd64.tar.gz
+    dest: /usr/local/src/
+    copy: no
+
+- name: create symlink to etcd install  home
+  file:
+    path: /usr/local/etcd
+    src: /usr/local/src/etcd-v3.3.11-linux-amd64
+    state: link
+    owner: etcd
+    group: etcd
+
+- name: create symlink to etcdctl
+  file:
+    path: "{{item.path}}"
+    src: "{{item.src}}"
+    state: link
+    owner: etcd
+    group: etcd
+  with_items:
+    - { src: '/usr/local/etcd/etcdctl', path: '/usr/local/bin/etcdctl'}
+    - { src: '/usr/local/etcd/etcd',path: '/usr/local/bin/etcd' }
+
+
+- name: create etcd data and configure dir
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: etcd 
+    group: etcd
+    mode: 0755
+  with_items:
+    - /mnt/lv01/etcd
+    - /etc/etcd/
+
+- name: add etcd.service.j2 to dest
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+  
+  
