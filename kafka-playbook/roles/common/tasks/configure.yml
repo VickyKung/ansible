@@ -7,6 +7,10 @@
   notify:
     restart kafka
 
-- name: flush handlers
-  meta: flush_handlers
 
+- name: set jmx 
+  lineinfile:
+    dest: /usr/local/kafka/bin/kafka-server-start.sh 
+    regexp: '^export KAFKA_HEAP_OPTS'
+    insertafter: 'export KAFKA_HEAP_OPTS'
+    line: 'export JMX_PORT="9999"'
