@@ -1,0 +1,17 @@
+- name: start kafka
+  service:
+    name: kafka.service
+    state: started
+    enabled: true
+
+- name: stop kafka
+  service:
+    name: kafka.service
+    state: stopped
+    enabled: true
+
+- name: restart kafka
+  service:
+    name: kafka.service
+    state: restarted
+    enabled: true

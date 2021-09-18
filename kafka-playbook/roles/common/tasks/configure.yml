@@ -1,0 +1,12 @@
+- name: configure kafka file
+  template: 
+    src: server.properties.j2
+    dest: /usr/local/kafka/config/server.properties
+    owner: "kafka"
+    group: "kafka"
+  notify:
+    restart kafka
+
+- name: flush handlers
+  meta: flush_handlers
+

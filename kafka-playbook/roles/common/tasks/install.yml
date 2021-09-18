@@ -1,0 +1,37 @@
+- name: add kafka group
+  group: name=kafka
+
+- name: add kafka user
+  user: name=kafka group=kafka shell=/sbin/nologin
+
+- name: copy kafka packages
+  copy:
+    src: kafka_2.13-2.6.0.tgz
+    dest: /usr/local/src/
+
+- name: tar kafka packages
+  unarchive:
+    src: /usr/local/src/kafka_2.13-2.6.0.tgz
+    dest: /usr/local/src/
+    copy: no
+
+- name: create symlink to kafka  install home
+  file:
+    path: /usr/local/kafka
+    src: /usr/local/src/kafka_2.13-2.6.0
+    state: link
+    owner: kafka
+    group: kafka
+
+- name: create kafka datalog dir 
+  file: 
+    path: "{{kafka_datalog_dir}}"
+    state: directory
+    owner: kafka
+    group: kafka
+    mode: 0755
+
+- name: copy kafka.service
+  template:
+    src: kafka.service.j2
+    dest: /etc/systemd/system/kafka.service

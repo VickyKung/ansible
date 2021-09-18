@@ -1,0 +1,5 @@
+[kafka]
+192.168.30.241 kafka_brokerid=1
+192.168.30.242 kafka_brokerid=2
+192.168.30.243 kafka_brokerid=3
+

@@ -1,0 +1,2 @@
+kafka_datalog_dir: "/mnt/lv01/kafka/logs"
+zookeeper_host: "192.168.30.241:2181,192.168.30.242:2181,192.168.30.243:2181"
