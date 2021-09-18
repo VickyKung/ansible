@@ -3,3 +3,6 @@
 
 - name: configure etcd
   include: configure.yml
+
+- name: set global env for etcd api
+  include: env.yml
