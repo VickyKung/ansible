@@ -1,0 +1,6 @@
+ansible >2.9
+ansible-galaxy collection install community.mongodb
+pip install pymongo
+目标主机安装：
+pip install pymongo
+python -m pip install pymongo
