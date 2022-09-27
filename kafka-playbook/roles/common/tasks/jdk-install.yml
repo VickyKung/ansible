@@ -1,0 +1,30 @@
+- name: copy jdk packages
+  copy:
+    src: jdk-8u281-linux-x64.tar.gz
+    dest: /usr/local/src/
+
+- name: create jvm dir 
+  file: 
+    path: /usr/lib/jvm
+    state: directory
+    mode: 0755
+
+ 
+- name: tar kafka packages
+  unarchive:
+    src: /usr/local/src/jdk-8u281-linux-x64.tar.gz
+    dest: /usr/lib/jvm
+    copy: no
+
+- name: set jdk env
+  lineinfile: dest=/etc/profile line="{{item.value}}" state=present
+  with_items:
+    - {value: "export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_281"}
+    - {value: "export JRE_HOME=${JAVA_HOME}/jre"}
+    - {value: "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"} 
+    - {value: "export PATH=${JAVA_HOME}/bin:$PATH"}
+
+- name: source profile
+  shell: source /etc/profile
+  args:
+    executable: /bin/bash
