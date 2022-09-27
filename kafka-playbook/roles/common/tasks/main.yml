@@ -1,3 +1,6 @@
+- name: install jdk
+  include: jdk-install.yml
+  
 - name: install kafka
   include: install.yml
 
